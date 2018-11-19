@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
-use http\Env\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CategoryController extends AbstractController
 {
     /**
-     * @Route("category", name="category")
+     * @Route("categorylist", name="categorynew")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function index()
@@ -47,7 +46,7 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @Route("/categorynew", name="categorynew")
+     * @Route("/category", name="category")
      */
     public function add(Request $request)
     {
