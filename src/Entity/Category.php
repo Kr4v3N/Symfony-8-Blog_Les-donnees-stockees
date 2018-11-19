@@ -24,13 +24,13 @@ class Category
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Article", mappedBy="category", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Article", mappedBy="category")
      */
-    private $articles;
+    private $article;
 
     public function __construct()
     {
-        $this->articles = new ArrayCollection();
+        $this->article = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -53,15 +53,15 @@ class Category
     /**
      * @return Collection|Article[]
      */
-    public function getArticles(): Collection
+    public function getArticle(): Collection
     {
-        return $this->articles;
+        return $this->article;
     }
 
     public function addArticle(Article $article): self
     {
-        if (!$this->articles->contains($article)) {
-            $this->articles[] = $article;
+        if (!$this->article->contains($article)) {
+            $this->article[] = $article;
             $article->setCategory($this);
         }
 
@@ -70,8 +70,8 @@ class Category
 
     public function removeArticle(Article $article): self
     {
-        if ($this->articles->contains($article)) {
-            $this->articles->removeElement($article);
+        if ($this->article->contains($article)) {
+            $this->article->removeElement($article);
             // set the owning side to null (unless already changed)
             if ($article->getCategory() === $this) {
                 $article->setCategory(null);
