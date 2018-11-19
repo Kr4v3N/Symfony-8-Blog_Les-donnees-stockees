@@ -1,18 +1,18 @@
 <?php
-// src/Controller/BlogController.php
+
 namespace App\Controller;
 
-use App\Entity\Article;
 use App\Entity\Category;
-use Symfony\Component\HttpFoundation\Response;
+use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\HttpFoundation\Response;
+use App\Entity\Article;
 
 class BlogController extends AbstractController
 {
     /**
-     * Show all row from articles's entity
+     * Show all row from article's entity
      *
      * @Route("/", name="blog_index")
      * @return Response A response instance
@@ -76,45 +76,50 @@ class BlogController extends AbstractController
         );
     }
 
+
     /**
-     * Getting one category with this articles
-     *
-     * @Route("/blog/category/{categoryName}",
-     *     defaults={"categoryName" = null},
-     *     name = "blog_show_category")
-     *
-     * @param string $categoryName
-     * @return Response
+     * @Route("blog/category/{category}", name="blog_show_category")
+     * @return Response A response instance
      */
-    public function showByCategory(string $categoryName) : Response
+    public function showByCategory(string $category) : Response
     {
-        if (!$categoryName) {
-            throw $this
-                ->createNotFoundException('No Category has been sent.');
-        }
-
-        $categoryName = preg_replace(
-            '/-/',
-            ' ', trim(strip_tags($categoryName))
-        );
-
-        $category = $this->getDoctrine()
+        $category = $this
+            ->getDoctrine()
             ->getRepository(Category::class)
-            ->findOneBy(
-                ['name' => $categoryName]
-            );
+            ->findOneByName($category);
 
-        $articles = $this->getDoctrine()
+        $articles = $this
+            ->getDoctrine()
             ->getRepository(Article::class)
-            ->findBy(
-                ['category' => $category->getId()],
-                ['id' => 'desc'],
-                3
-            );
+            ->findBy(array ('category'=> $category),  array ('id' =>'ASC'), 3);
 
-        return $this->render(
-            'blog/category.html.twig',
-            ['articles' => $articles, 'categoryName' => $categoryName]
+
+        return $this->render
+        ('blog/category.html.twig',
+            [
+                'articles' => $articles,
+                'category'=> $category
+            ]
+
+        );
+    }
+
+    /**
+     * @Route("blog/category/{name}/all", name="blog_show_all_category")
+     * @return Response A response instance
+     *
+     */
+    public function showAllByCategory(Category $category) : Response
+    {
+        $categories = $category->getArticles();
+
+
+        return $this->render
+        ('blog/allByCategory.html.twig',
+            [
+                'categories'=> $categories
+            ]
+
         );
     }
 }
