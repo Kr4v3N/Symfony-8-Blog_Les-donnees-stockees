@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Form\ArticleType;
 use App\Form\CategoryType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,16 +52,16 @@ class CategoryController extends AbstractController
     public function add(Request $request)
     {
         $category = new Category();
-        $form = $this->createForm(CategoryType::class, $category);
-        $form->handleRequest($request);
-        if ($form->isSubmitted()) {
-            $data = $form->getData();
+        $form2 = $this->createForm(ArticleType::class);
+        $form2->handleRequest($request);
+        if ($form2->isSubmitted()) {
+            $data = $form2->getData();
             $em = $this->getDoctrine()->getManager();
             $em->persist($data);
             $em->flush();
         }
         return $this->render('category/categoryAdd.html.twig', [
-            'form' =>$form->createView(),
+            'form2' =>$form2->createView(),
         ]);
     }
 
