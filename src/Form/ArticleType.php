@@ -9,18 +9,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ArticleType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder
-            ->add('title')
-            ->add('content')
-            ->add('category', EntityType::class,[
-                'class' => Category::class,
-                'choice_label' => 'name'
-            ])
-        ;
-    }
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
