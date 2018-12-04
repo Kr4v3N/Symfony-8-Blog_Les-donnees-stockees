@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{%  block body %}
+
+
+    {{ form_start(form2) }}
+
+    <input type="submit" value="Envoyer" />
+    {{ form_end(form2) }}
+
+    <hr>
+    <a href="{{ path("categorynew") }}">
+        Back to all category
+    </a>
+
+{%  endblock %}

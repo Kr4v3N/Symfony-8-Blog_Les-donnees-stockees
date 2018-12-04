@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+ {% block title %}Hello!{% endblock %}
+ {% block body %}
+     <p>Nom du tag : {{ tag.name }}</p>
+     <br>
+     <p>La liste des articles associés à ce tag :</p>
+     <ul>{% for article in tag.articles %}
+             <li><a href="{{ path("article_show", {'id': article.id}) }}">{{ article.title }}</a></li>
+         {% endfor %}</ul>
+ {% endblock %}
+
+
+
