@@ -23,7 +23,7 @@ class BlogController extends AbstractController
     /**
      * Show all row from article's entity
      *
-     * @Route("/", name="blog_index")
+     * @Route("/articles", name="blog_index")
 
      */
     public function index()

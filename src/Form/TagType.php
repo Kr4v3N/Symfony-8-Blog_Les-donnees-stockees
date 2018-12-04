@@ -16,7 +16,7 @@ class TagType extends AbstractType
         $builder
             ->add('name')
             ->add('articles', EntityType::class, array(
-                'class'=>Article::class,'choice_label'=> 'title', 'multiple'=> true))
+                'class'=>Article::class,'choice_label'=> 'title', 'multiple'=> true, 'expanded'=> true))
         ;
     }
 
