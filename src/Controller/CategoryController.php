@@ -1,67 +1,47 @@
 <?php
-
 namespace App\Controller;
-
-use App\Entity\Category;
-use App\Form\ArticleType;
 use App\Form\CategoryType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Category;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-
 class CategoryController extends AbstractController
 {
     /**
-     * @Route("categorylist", name="categorynew")
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/category", name="category")
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = $this->getDoctrine()
-            ->getRepository(Category::class)
-            ->findAll();
 
-        if (!$categories) {
-            throw $this->createNotFoundException(
-                'No article found in article\'s table.'
-            );
+        $category = new Category();
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $category = $form->getData();
+            $EntityManager = $this->getDoctrine()->getManager();
+            $EntityManager->persist($category);
+            $EntityManager->flush();
         }
 
-        return $this->render(
-            '/category/category.html.twig',
-            ['categories' => $categories]
-        );
+
+        return $this->render('category/index.html.twig', [
+            'controller_name' => 'CategoryController',
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
-     * @Route("category/{id}", name="category_show")
      * @param Category $category
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/category/{category}", name="category_show")
      */
     public function show(Category $category)
     {
-        return $this->render(
-            '/category/categoryShow.html.twig',
-            ['category' => $category]
-        );
-    }
-
-    /**
-     * @Route("/category", name="category")
-     */
-    public function add(Request $request)
-    {
-        $category = new Category();
-        $form2 = $this->createForm(ArticleType::class);
-        $form2->handleRequest($request);
-        if ($form2->isSubmitted()) {
-            $data = $form2->getData();
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($data);
-            $em->flush();
-        }
-        return $this->render('category/categoryAdd.html.twig', [
-            'form2' =>$form2->createView(),
+        return $this->render('category/index.html.twig', [
+            'category' => $category
         ]);
     }
 
